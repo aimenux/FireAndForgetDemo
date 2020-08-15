@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Threading.Tasks;
+using FireAndForgetDemo.Exceptions;
 using FireAndForgetDemo.Helpers;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace FireAndForgetDemo.Examples
 {
-    public class Example1 : AbstractExample
+    public class Example2 : AbstractExample
     {
-        public Example1(IOptions<Settings> options, ITaskHelper taskHelper, ILogger logger) : base(options.Value, taskHelper, logger)
+        public Example2(IOptions<Settings> options, ITaskHelper taskHelper, ILogger logger) : base(options.Value, taskHelper, logger)
         {
+            Logger = logger;
         }
 
-        public override string Description { get; } = "Run successful fire/forget task";
+        public override string Description { get; } = "Run unsuccessful fire/forget task";
 
         public override Task RunAsync()
         {
@@ -22,10 +24,11 @@ namespace FireAndForgetDemo.Examples
                 return Task.Delay(TimeSpan.FromSeconds(AwaitableTaskDurationInSeconds));
             }).ContinueWith(previousTask => TaskHelper.OnTerminatedTask(previousTask, AwaitableTaskName));
 
-            var fireAndForgetTask = Task.Run(() =>
+            var fireAndForgetTask = Task.Run(async () =>
             {
                 Logger.LogInformation($"Running '{FireAndForgetTaskName}' during '{FireAndForgetTaskDurationInSeconds}' sec");
-                return Task.Delay(TimeSpan.FromSeconds(FireAndForgetTaskDurationInSeconds));
+                await Task.Delay(TimeSpan.FromSeconds(FireAndForgetTaskDurationInSeconds));
+                throw TaskException.TaskHasFailed(FireAndForgetTaskName);
             }).ContinueWith(previousTask => TaskHelper.OnTerminatedTask(previousTask, FireAndForgetTaskName));
 
             TaskHelper.FireAndForgetTask(fireAndForgetTask, FireAndForgetTaskName);

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using FireAndForgetDemo.Examples;
+using FireAndForgetDemo.Helpers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -22,6 +23,9 @@ namespace FireAndForgetDemo
 
             var services = new ServiceCollection();
             services.AddTransient<IExample, Example1>();
+            services.AddTransient<IExample, Example2>();
+            services.AddSingleton<ITaskHelper, TaskHelper>();
+
             services.AddLogging(builder =>
             {
                 builder.AddConsole(options =>
