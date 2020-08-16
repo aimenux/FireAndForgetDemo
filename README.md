@@ -5,7 +5,7 @@ Demo of using a fire & forget tasks
 ```
 
 > `Definition` : We talk about “fire & forget” pattern when a process call another thread and continue the process flow, without waiting for a response from the called thread.
->> the called thread (i.e `fire/forget` task) should always terminate successfully without impacting performance or exiting the process flow. it may swallow or log exceptions.
+>> The called thread (i.e `fire/forget` task) should always terminate successfully without impacting performance or exiting the process flow. it may swallow or log exceptions.
 
 > Multiple examples are implemented :
 >
