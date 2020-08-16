@@ -21,16 +21,18 @@ namespace FireAndForgetDemo.Helpers
 
         public void OnTerminatedTask(Task previousTask, string previousTaskName = null, [CallerMemberName] string callerName = null)
         {
+            var status = previousTask.Status;
             var exception = previousTask.Exception;
             var name = previousTaskName ?? callerName;
 
             if (previousTask.IsFaulted)
             {
-                _logger.LogError($"An exception has occured on previousTask '{name}': {exception}");
-                return;
+                _logger.LogError($"An exception has occured on previous task '{name}': {exception}");
             }
-
-            _logger.LogInformation($"Task '{previousTaskName}' is terminated with status '{previousTask.Status}'");
+            else
+            {
+                _logger.LogInformation($"Task '{name}' has terminated successfully with status '{status}'");
+            }
         }
     }
 }

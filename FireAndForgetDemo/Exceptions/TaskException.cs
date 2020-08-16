@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace FireAndForgetDemo.Exceptions
 {
     [Serializable]
-    public class TaskException : ApplicationException
+    public class TaskException : BaseException
     {
         protected TaskException()
         {

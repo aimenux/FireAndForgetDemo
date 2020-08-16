@@ -22,15 +22,17 @@ namespace FireAndForgetDemo
                 .Build();
 
             var services = new ServiceCollection();
-            services.AddTransient<IExample, Example1>();
-            services.AddTransient<IExample, Example2>();
+            //services.AddTransient<IExample, Example1>();
+            //services.AddTransient<IExample, Example2>();
+            services.AddTransient<IExample, Example3>();
             services.AddSingleton<ITaskHelper, TaskHelper>();
+            services.AddSingleton<IStubHelper, StubHelper>();
 
             services.AddLogging(builder =>
             {
                 builder.AddConsole(options =>
                 {
-                    options.DisableColors = true;
+                    options.DisableColors = false;
                     options.TimestampFormat = "[HH:mm:ss:fff] ";
                 });
                 builder.AddNonGenericLogger();
@@ -47,11 +49,11 @@ namespace FireAndForgetDemo
             {
                 var name = example.GetType().Name;
                 var description = example.Description;
-                ConsoleColor.Green.WriteLine($"{name} -> {description}");
+                ConsoleColor.Cyan.WriteLine($"{name} -> {description}");
                 sw.Start();
                 await example.RunAsync();
                 sw.Stop();
-                ConsoleColor.Green.WriteLine($"{name} -> Elapsed time '{sw.ElapsedMilliseconds}' ms\n");
+                ConsoleColor.Cyan.WriteLine($"{name} -> Elapsed time '{sw.ElapsedMilliseconds}' ms\n");
             }
 
             Console.WriteLine("Press any key to exit !\n");

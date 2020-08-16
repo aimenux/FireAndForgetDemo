@@ -11,5 +11,9 @@ Demo of using a fire & forget tasks
 >
 > **(2)** Example2 : both `awaitable` & `fire/forget` tasks are independent, `fire/forget` will throw an exception
 >> `Example2` will terminate successfully and will spend as much time as `awaitable` task
+>
+> **(2)** Example3 : `awaitable` & `fire/forget` tasks are dependent, `fire/forget` may or not throw an exception 
+>> `Example3` will terminate successfully when FoundDocumentsOnUnstableStorage is set to true
+>> `Example3` will not terminate successfully when FoundDocumentsOnUnstableStorage is set to false
 
 **`Tools`** : vs19, net core 3.1
