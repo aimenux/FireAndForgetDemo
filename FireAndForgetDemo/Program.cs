@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using FireAndForgetDemo.Examples;
 using FireAndForgetDemo.Helpers;
@@ -22,8 +21,8 @@ namespace FireAndForgetDemo
                 .Build();
 
             var services = new ServiceCollection();
-            //services.AddTransient<IExample, Example1>();
-            //services.AddTransient<IExample, Example2>();
+            services.AddTransient<IExample, Example1>();
+            services.AddTransient<IExample, Example2>();
             services.AddTransient<IExample, Example3>();
             services.AddSingleton<ITaskHelper, TaskHelper>();
             services.AddSingleton<IStubHelper, StubHelper>();
@@ -36,12 +35,14 @@ namespace FireAndForgetDemo
                     options.TimestampFormat = "[HH:mm:ss:fff] ";
                 });
                 builder.AddNonGenericLogger();
+                builder.SetMinimumLevel(LogLevel.Trace);
             });
             
             services.Configure<Settings>(configuration.GetSection(nameof(Settings)));
 
             var serviceProvider = services.BuildServiceProvider();
-            var examples = serviceProvider.GetServices<IExample>().ToList();
+            var logger = serviceProvider.GetService<ILogger>();
+            var examples = serviceProvider.GetServices<IExample>();
 
             var sw = new Stopwatch();
 
@@ -49,11 +50,11 @@ namespace FireAndForgetDemo
             {
                 var name = example.GetType().Name;
                 var description = example.Description;
-                ConsoleColor.Cyan.WriteLine($"{name} -> {description}");
+                logger.LogInformation($"{name} -> {description}");
                 sw.Start();
                 await example.RunAsync();
                 sw.Stop();
-                ConsoleColor.Cyan.WriteLine($"{name} -> Elapsed time '{sw.ElapsedMilliseconds}' ms\n");
+                logger.LogInformation($"{name} -> Elapsed time '{sw.ElapsedMilliseconds}' ms");
             }
 
             Console.WriteLine("Press any key to exit !\n");

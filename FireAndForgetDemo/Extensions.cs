@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace FireAndForgetDemo
@@ -15,13 +14,6 @@ namespace FireAndForgetDemo
                 var loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
                 return loggerFactory.CreateLogger(categoryName);
             });
-        }
-
-        public static void WriteLine(this ConsoleColor color, object value)
-        {
-            Console.ForegroundColor = color;
-            Console.WriteLine(value);
-            Console.ResetColor();
         }
     }
 }
